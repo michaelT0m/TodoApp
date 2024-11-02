@@ -172,7 +172,7 @@ const TodoApp = () => {
   return (
     <div className="w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden text-black">
       <div className="p-6 bg-blue-500">
-        <h2 className="text-2xl font-bold text-white">Todo List</h2>
+        <h2 className="text-2xl font-bold text-white"> List</h2>
       </div>
 
       <div className="p-6">
