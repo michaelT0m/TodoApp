@@ -7,7 +7,9 @@ import { useState } from "react";
 function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [todoInput, setTodoInput] = useState("");
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("savedTodos")) || []);
+  const [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem("savedTodos")) || []
+  );
 
   const addTodo = (e) => {
     e.preventDefault();
@@ -30,6 +32,11 @@ function Home() {
     setTodoInput("");
   };
 
+  const deleteTodo = (id) => {
+    const updatedTodo = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodo);
+    localStorage.setItem("savedTodos", JSON.stringify(updatedTodo));
+  };
 
   return (
     <div className="bg-background text-white">
@@ -67,7 +74,12 @@ function Home() {
           </Base>
           <div className="space-y-4">
             {todos.map((todo) => (
-              <Todo key={todo.id} UserTask={todo.todo} />
+              <Todo
+                key={todo.id}
+                id={todo.id}
+                UserTask={todo.todo}
+                deleteTodo={deleteTodo}
+              />
             ))}
           </div>
         </div>
