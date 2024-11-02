@@ -7,13 +7,15 @@ import { useState } from "react";
 function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [todoInput, setTodoInput] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
+
   const [todos, setTodos] = useState(
     JSON.parse(localStorage.getItem("savedTodos")) || []
   );
 
-  const addTodo = (e) => {
-    e.preventDefault();
-
+  // Add Function
+  const addTodo = () => {
     const todo = todoInput.trim();
 
     if (!todo) return;
@@ -32,6 +34,25 @@ function Home() {
     setTodoInput("");
   };
 
+  // Edit Function
+  const editTodo = (id, todo) => {
+    setEditId(id);
+    setEditText(todo);
+  };
+  const saveEdit = () => {
+    const updatedTodo = todos.map((todo) => todo.id === editId ? {...todo, todo: editText} : todo);
+    setTodos(updatedTodo);
+    localStorage.setItem("savedTodos", JSON.stringify(updatedTodo));
+    setEditId(null);
+    setEditText("");
+  };
+
+  const cancelEdit = () => {
+    setEditId(null);
+    setEditText("");
+  };
+
+  // Delete Function
   const deleteTodo = (id) => {
     const updatedTodo = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodo);
@@ -66,6 +87,7 @@ function Home() {
                 onChange={(e) => setTodoInput(e.target.value)}
                 placeholder="Add a new task..."
                 className="w-full bg-transparent outline-none border-neutral-500  border-2 rounded-md p-2 my-6"
+                onKeyDown={(e) => e.key === "Enter" && addTodo()}
               />
               <div className="flex justify-center">
                 <Buttons text="Add Todo" onClick={addTodo} />
@@ -77,8 +99,14 @@ function Home() {
               <Todo
                 key={todo.id}
                 id={todo.id}
-                UserTask={todo.todo}
+                todo={todo.todo}
                 deleteTodo={deleteTodo}
+                editTodo={editTodo}
+                editId={editId}
+                editText={editText}
+                setEditText={setEditText}
+                cancelEdit={cancelEdit}
+                saveEdit={saveEdit}
               />
             ))}
           </div>
