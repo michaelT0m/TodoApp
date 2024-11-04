@@ -38,17 +38,37 @@ export const Todo = ({
               className="absolute right-0 h-full flex text-xl items-center cursor-pointer"
               onClick={() => setMenu(!menu)}
             >
-              <SlOptionsVertical />
+              <div className="md:hidden">
+                <SlOptionsVertical />
+              </div>
+              <div className="md:flex gap-2 hidden ">
+                <span
+                  title="Edit"
+                  className="flex items-center text-sm gap-1 text-[#999999] hover:text-[#cccccc]"
+                  onClick={() => editTodo(id, todo)}
+                >
+                  <LuPenLine />
+                  Edit
+                </span>
+                <span
+                  title="Delete"
+                  className="flex items-center text-sm gap-1 text-red-600"
+                  onClick={() => deleteTodo(id)}
+                >
+                  <LuTrash2 />
+                  Delete
+                </span>
+              </div>
             </div>
             <span
-              className={`absolute right-0 cursor-pointer ${
+              className={`absolute right-0 cursor-pointer md:hidden ${
                 menu ? "block" : "hidden"
               }`}
               onClick={() => setMenu(!menu)}
             >
               <Base p="px-4 py-2" className={`shadow-xl space-y-2`}>
                 <span
-                  className="flex items-center text-sm gap-1"
+                  className="flex items-center text-sm gap-1 "
                   onClick={() => editTodo(id, todo)}
                 >
                   <LuPenLine />
