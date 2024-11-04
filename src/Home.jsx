@@ -74,18 +74,15 @@ function Home() {
           <Base>
             <div
               className={`${
-                isVisible ? "" : ""
+                isVisible ? '' : ''
               } flex gap-4 items-center text-xl justify-center cursor-pointer`}
             >
               <LuCheckCircle />
-              <span
-                className="select-none"
-                onClick={() => setIsVisible(!isVisible)}
-              >
-                {!isVisible ? "Add task" : "Tasks"}
+              <span className="select-none" onClick={() => setIsVisible(!isVisible)}>
+                {!isVisible ? 'Add task' : 'Tasks'}
               </span>
             </div>
-            <div className={`${isVisible ? "block" : "hidden"}`}>
+            <div className={`${isVisible ? 'block' : 'hidden'}`}>
               <div
                 className={` w-full rounded-md bg-neutral-700 border-neutral-600 hover:border-blue-600 border-2 flex items-center my-6 px-2`}
               >
@@ -97,7 +94,7 @@ function Home() {
                   onChange={(e) => setTodoInput(e.target.value)}
                   placeholder="Add a new task..."
                   className="w-full bg-transparent outline-none py-2"
-                  onKeyDown={(e) => e.key === "Enter" && addTodo()}
+                  onKeyDown={(e) => e.key === 'Enter' && addTodo()}
                 />
 
                 <span className="cursor-pointer bg-slate-00 flex items-center gap-2">
@@ -139,11 +136,7 @@ function Home() {
               </div>
 
               <div className="flex justify-center text-blac gap-4">
-                <select
-                  name=""
-                  id=""
-                  className="bg-transparent outline-none border-none"
-                >
+                <select name="" id="" className="bg-transparent outline-none border-none">
                   <option value="high" className="text-black">
                     High
                   </option>

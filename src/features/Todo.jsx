@@ -1,8 +1,8 @@
-import { LuCircle, LuCheck, LuTrash2, LuPenLine } from "react-icons/lu";
-import { useState } from "react";
-import { SlOptionsVertical } from "react-icons/sl";
+import { LuCircle, LuCheck, LuTrash2, LuPenLine } from 'react-icons/lu';
+import { useState, useEffect, useRef } from 'react';
+import { SlOptionsVertical } from 'react-icons/sl';
+import { Base, BaseEdit } from './Base';
 
-import { Base, BaseEdit } from "./Base";
 export const Todo = ({
   todo,
   id,
@@ -12,11 +12,23 @@ export const Todo = ({
   editText,
   setEditText,
   cancelEdit,
-  saveEdit
+  saveEdit,
 }) => {
   const [isChecked, setIsisChecked] = useState(false);
-
   const [menu, setMenu] = useState(false);
+
+  const dropdownRef = useRef();
+  useEffect(() => {
+    function outsideClicks(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setMenu(false);
+      }
+    }
+    document.addEventListener('mousedown', outsideClicks);
+    return () => {
+      document.removeEventListener('mousedown', outsideClicks);
+    };
+  });
   return (
     <>
       {editId === id ? (
@@ -33,18 +45,15 @@ export const Todo = ({
               {isChecked ? <LuCheck /> : <LuCircle />}
             </button>
 
-            <span className={`${isChecked ? "line-through" : ""}`}>{todo}</span>
-            <div
-              className="absolute right-0 h-full flex text-xl items-center cursor-pointer"
-              onClick={() => setMenu(!menu)}
-            >
-              <div className="md:hidden">
+            <span className={`${isChecked ? 'line-through text-grayText' : ''}`}>{todo}</span>
+            <div className="absolute right-0 h-full flex text-xl items-center cursor-pointer">
+              <div className="md:hidden" onClick={() => setMenu(!menu)}>
                 <SlOptionsVertical />
               </div>
               <div className="md:flex gap-2 hidden ">
                 <span
                   title="Edit"
-                  className="flex items-center text-sm gap-1 text-[#999999] hover:text-[#cccccc]"
+                  className="flex items-center text-sm gap-1 text-grayText hover:text-[#cccccc]"
                   onClick={() => editTodo(id, todo)}
                 >
                   <LuPenLine />
@@ -61,10 +70,9 @@ export const Todo = ({
               </div>
             </div>
             <span
-              className={`absolute right-0 cursor-pointer md:hidden ${
-                menu ? "block" : "hidden"
-              }`}
+              className={`absolute right-0 cursor-pointer md:hidden ${menu ? 'block' : 'hidden'}`}
               onClick={() => setMenu(!menu)}
+              ref={dropdownRef}
             >
               <Base p="px-4 py-2" className={`shadow-xl space-y-2`}>
                 <span
