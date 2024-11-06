@@ -1,21 +1,21 @@
-import { Base } from "./features/Base";
-import { LuCalendar, LuCheckCircle } from "react-icons/lu";
-import { Todo } from "./features/Todo.jsx";
-import { useState } from "react";
-import Buttons from "./features/Buttons.jsx";
+import { Base } from './features/Base';
+import { LuCalendar, LuCheckCircle, LuSearch} from 'react-icons/lu';
+import { Todo } from './features/Todo.jsx';
+import { useState } from 'react';
+import Buttons from './features/Buttons.jsx';
 
 function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
-  const [todoInput, setTodoInput] = useState("");
+  const [todoInput, setTodoInput] = useState('');
   const [editId, setEditId] = useState(null);
-  const [editText, setEditText] = useState("");
-  const [priority, setPriority] = useState("medium");
-  const [dueDate, setDueDate] = useState("");
+  const [editText, setEditText] = useState('');
+  const [priority, setPriority] = useState('medium');
+  const [dueDate, setDueDate] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem("savedTodos")) || []
-  );
+
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('savedTodos')) || []);
 
   // Add Function
   const addTodo = () => {
@@ -27,15 +27,18 @@ function Home() {
       id: Date.now(),
       todo: todo,
       priority,
+      dueDate,
     };
 
     setTodos([todoObj, ...todos]);
 
-    let savedTodo = JSON.parse(localStorage.getItem("savedTodos")) || [];
+    let savedTodo = JSON.parse(localStorage.getItem('savedTodos')) || [];
     savedTodo.push(todoObj);
 
-    localStorage.setItem("savedTodos", JSON.stringify(savedTodo));
-    setTodoInput("");
+    localStorage.setItem('savedTodos', JSON.stringify(savedTodo));
+    setTodoInput('');
+    setPriority;('medium')
+    setDueDate('');
   };
 
   // Edit Function
@@ -45,38 +48,54 @@ function Home() {
   };
   const saveEdit = () => {
     const updatedTodo = todos.map((todo) =>
-    todo.id === editId ? { ...todo, todo: editText } : todo
+      todo.id === editId ? { ...todo, todo: editText } : todo
     );
     setTodos(updatedTodo);
-    localStorage.setItem("savedTodos", JSON.stringify(updatedTodo));
+    localStorage.setItem('savedTodos', JSON.stringify(updatedTodo));
 
     setEditId(null);
-    setEditText("");
+    setEditText('');
   };
 
   const cancelEdit = () => {
     setEditId(null);
-    setEditText("");
+    setEditText('');
   };
 
   // Delete Function
   const deleteTodo = (id) => {
     const updatedTodo = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodo);
-    localStorage.setItem("savedTodos", JSON.stringify(updatedTodo));
+    localStorage.setItem('savedTodos', JSON.stringify(updatedTodo));
   };
+
+    const filteredTodos = todos.filter((todo) =>
+      todo.todo.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   return (
     <div className="bg-background text-white">
       {/* <Review /> */}
       <div className="p-4 min-h-screen flex items-center justify-center w-4/5 mx-auto ">
         <div className="container flex mx-auto flex-col gap-4">
+          {/*  */}
+
+          <Base p="p-2 px-4b" className={`flex items-center gap-4`}>
+            <div className="">
+              <LuSearch fontSize={22}/>
+            </div>
+            <input
+              type="text"
+              placeholder="Search todos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-transparent outline-none py-2"
+            />
+          </Base>
+          {/*  */}
+
           <Base>
-            <div
-              className={`${
-                isVisible ? '' : ''
-              } flex gap-4 items-center text-xl justify-center cursor-pointer`}
-            >
+            <div className={`flex gap-4 items-center text-xl justify-center cursor-pointer`}>
               <LuCheckCircle />
               <span className="select-none" onClick={() => setIsVisible(!isVisible)}>
                 {!isVisible ? 'Add task' : 'Tasks'}
@@ -97,7 +116,7 @@ function Home() {
                   onKeyDown={(e) => e.key === 'Enter' && addTodo()}
                 />
 
-                <span className="cursor-pointer bg-slate-00 flex items-center gap-2">
+                <span className="cursor-pointer bg-slate-00 md:flex items-center gap-2 hidden ">
                   <select
                     name=""
                     id=""
@@ -121,6 +140,8 @@ function Home() {
                       type="date"
                       name=""
                       id=""
+                      value={dueDate}
+                      onChange={(e) => setDueDate(e.target.value)}
                       onClick={() => setShowDropDown(true)}
                       className={`bg-transparent  outline-none border-none w-6 bg-white opacity-0`}
                     />
@@ -128,14 +149,13 @@ function Home() {
                       <LuCalendar fontSize={24} className="cursor-pointer" />
                     </div>
                   </div>
-                  {/* <LuCalendar fontSize={22} className="cursor-pointer" /> */}
-                  <div className=" justify-center m-1 hidden">
+                  {/* <div className=" justify-center m-1 hidden">
                     <Buttons text="Add Todo" onClick={addTodo} />
-                  </div>
+                  </div> */}
                 </span>
               </div>
-
-              <div className="flex justify-center text-blac gap-4">
+              {/* mobile */}
+              <div className="flex justify-center text-blac gap-4 md:hidden">
                 <select name="" id="" className="bg-transparent outline-none border-none">
                   <option value="high" className="text-black">
                     High
@@ -162,21 +182,36 @@ function Home() {
               </div>
             </div>
           </Base>
+
           <div className="space-y-4">
-            {todos.map((todo) => (
+            {filteredTodos.map((todo) => (
               <Todo
-                key={todo.id}
                 id={todo.id}
-                todo={todo.todo}
-                deleteTodo={deleteTodo}
-                editTodo={editTodo}
+                key={todo.id}
                 editId={editId}
+                todo={todo.todo}
                 editText={editText}
-                setEditText={setEditText}
-                cancelEdit={cancelEdit}
+                editTodo={editTodo}
                 saveEdit={saveEdit}
+                cancelEdit={cancelEdit}
+                deleteTodo={deleteTodo}
+                priority={todo.priority}
+                dueDate={todo.dueDate}
+                setEditText={setEditText}
+                filteredTodos={filteredTodos}
+                searchTerm={searchTerm}
               />
             ))}
+            {filteredTodos.length === 0 && searchTerm && (
+              <div className="text-center py-8 text-gray-500">
+                No todos found matching &#34;{searchTerm}&#34;
+              </div>
+            )}
+            {filteredTodos.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No Todos add a todo by clicking the Add task button
+              </div>
+            )}
           </div>
         </div>
       </div>
