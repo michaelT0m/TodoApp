@@ -70,10 +70,10 @@ export const Todo = ({
 
               {/* Desktop */}
               <div className="absolute right-0 h-full flex text-xl items-center cursor-default">
-                <div className="md:hidden" onClick={() => setMenu(!menu)}>
+                <div className="sm:hidden" onClick={() => setMenu(!menu)}>
                   <SlOptionsVertical />
                 </div>
-                <div className="md:flex items-center gap-4 hidden ">
+                <div className="sm:flex items-center gap-4 hidden ">
                   <span title="priority" className={`text-sm ${priorityChecker(priority)}`}>
                     {priority}
                   </span>
