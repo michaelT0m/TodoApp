@@ -1,8 +1,8 @@
 import { FaTimes } from "react-icons/fa";
-export const Base = ({ children, p = "p-4", className }) => {
+export const Base = ({ children, p = "p-4", className, width="w-full" }) => {
   return (
     <div
-      className={` w-full rounded-md ${p} bg-neutral-700 border-neutral-600 border-2 ${className}`}
+      className={` ${width} rounded-md ${p} bg-neutral-700 border-neutral-600 border-2 ${className}`}
     >
       {children}
     </div>

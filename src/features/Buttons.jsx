@@ -1,9 +1,6 @@
-function Buttons({ text, onClick, width }) {
+function Buttons({ text, onClick, width, bg = 'bg-blue-600 hover:bg-blue-700' }) {
   return (
-    <button
-      className={`bg-blue-600 hover:bg-blue-700 p-2 rounded-md px-4 text-nowrap ${width}`}
-      onClick={onClick}
-    >
+    <button className={`${bg} p-2 rounded-md px-4 text-nowrap ${width}`} onClick={onClick}>
       {text}
     </button>
   );
